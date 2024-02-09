@@ -9,16 +9,18 @@ Stager shellcode in the C format can be encrypted by using:
 ```
 #include <stdio.h>
 
-unsigned char code[] = "\x90\x90\x90"; // Enter shellcode here
+unsigned char code[] = "\x90\x90\x90";
 
 int main()
 {
-    char key = 'K'; // Change XOR key here
+
+    char key[] = "key"; //Enter key here
+    int keylen = strlen(key);
     int i = 0;
-    for (i; i<sizeof(code); i++)
-    {
-        printf("\\x%02x",code[i]^key);
+    for (i; i < sizeof(code); i++) {
+        printf("\\x%02x",code[i]^key[i % keylen]);
     }
+ 
 }
 
 ```

